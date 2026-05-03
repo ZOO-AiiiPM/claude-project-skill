@@ -3,8 +3,8 @@ name: project-setup
 description: >
   Claude Code 项目骨架 + 深度审查 + 按标准改造。三个子场景：
   ① init — 用 template/ 骨架建新项目（CLAUDE.md / journal.md / .claude/memory+rules+hooks / lessons / docs / workspace 全套），填占位符 + 配 autoMemoryDirectory + 预置 journal 提醒 hook。
-  ② audit — AI 驱动的深度审查，Claude 读 references/ 标准 + 读项目内容做主观判断，出带原文引用的诊断报告（不改文件）。
-  ③ apply — 用户批准审查报告后，Claude 按 references/ 标准具体改项目。
+  ② audit — AI 驱动的深度审查，Claude 读 references/ 里的标准+ 读项目内容做主观判断，出带原文引用的诊断报告（不改文件）。
+  ③ apply — 用户批准审查报告后，Claude 按 references/ 里的标准具体改项目。
 
   用户说以下任一内容时立刻触发：
   "初始化新项目"、"建新项目"、"新项目起手"、"帮我建个项目"、"从模板创建项目"、
@@ -20,7 +20,7 @@ allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 
 # project-setup — 项目结构脚手架、AI 深度审查、按标准改造
 
-这个 skill 的产物是**一套项目协作标准**（记在 `references/` 的 8 份 spec 里），围绕它提供三件配套：
+这个 skill 的产物是**一套项目协作标准**（记在 `references/` 的 8 份标准 里），围绕它提供三件配套：
 
 - **init** — 用 `template/` 建新项目，一次到位符合标准
 - **audit** — Claude 读项目 + 读 `references/` → **主观判断** → 给带原文引用的深度报告（不改文件）
@@ -50,20 +50,20 @@ $ARGUMENTS
 
 ## 标准来源（references/）
 
-所有三个子场景的**判断依据**都在这 8 份 spec 里。init 按它们建、audit 按它们比、apply 按它们改。每份 spec 结构统一：应该长什么样 / 为什么这样 / 判断标准 / 反模式 / 示例。
+所有三个子场景的**判断依据**都在这 8 份标准 里。init 按它们建、audit 按它们比、apply 按它们改。每份标准 结构统一：应该长什么样 / 为什么这样 / 判断标准 / 反模式 / 示例。
 
 | Spec | 管什么 |
 |------|-------|
-| [claudemd-spec.md](references/claudemd-spec.md) | `CLAUDE.md` 行数 / 段 / 规则 vs 事实边界 |
-| [journal-spec.md](references/journal-spec.md) | `journal.md` 倒序 / 三段格式 / 活跃度阈值 |
-| [memory-spec.md](references/memory-spec.md) | `.claude/memory/` 命名 / frontmatter / 索引一致性 / autoMemoryDirectory |
-| [rules-spec.md](references/rules-spec.md) | `.claude/rules/` 命令式 / paths 作用域 / 和全局 rules 分工 |
-| [lessons-spec.md](references/lessons-spec.md) | `lessons/` 叙事标准 / 蒸馏链位置 / 触发阈值 |
-| [docs-spec.md](references/docs-spec.md) | `docs/` 人读文档 / 编号 / archive |
-| [workspace-spec.md](references/workspace-spec.md) | `workspace/` 临时产物 / gitignore 覆盖 |
-| [gitignore-spec.md](references/gitignore-spec.md) | `.gitignore` 必须段 / memory 白名单 / 敏感项 |
+| [claudemd.md](references/claudemd.md) | `CLAUDE.md` 行数 / 段 / 规则 vs 事实边界 |
+| [journal.md](references/journal.md) | `journal.md` 倒序 / 三段格式 / 活跃度阈值 |
+| [memory.md](references/memory.md) | `.claude/memory/` 命名 / frontmatter / 索引一致性 / autoMemoryDirectory |
+| [rules.md](references/rules.md) | `.claude/rules/` 命令式 / paths 作用域 / 和全局 rules 分工 |
+| [lessons.md](references/lessons.md) | `lessons/` 叙事标准 / 蒸馏链位置 / 触发阈值 |
+| [docs.md](references/docs.md) | `docs/` 人读文档 / 编号 / archive |
+| [workspace.md](references/workspace.md) | `workspace/` 临时产物 / gitignore 覆盖 |
+| [gitignore.md](references/gitignore.md) | `.gitignore` 必须段 / memory 白名单 / 敏感项 |
 
-**用这些 spec 的方式**：在 audit / apply 前按需 Read 对应的 spec，不要凭记忆判断 —— 标准可能随项目演化，spec 才是权威。
+**用这些标准的方式**：在 audit / apply 前按需 Read 对应的标准文档，不要凭记忆判断 —— 标准可能随项目演化，标准才是权威。
 
 ---
 
@@ -182,25 +182,25 @@ wc -l CLAUDE.md journal.md 2>/dev/null
 
 #### 2. 逐维度深度审视（AI 判断核心）
 
-按下面 8 个维度一个个做。**每个维度都要 Read `references/` 对应 spec 和项目对应文件，带原文行号引用**：
+按下面 8 个维度一个个做。**每个维度都要 Read `references/` 对应标准和项目对应文件，带原文行号引用**：
 
 ##### 2.1 CLAUDE.md 规则质量
 
-- Read `references/claudemd-spec.md` 作标准
+- Read `references/claudemd.md` 作标准
 - Read 项目 `CLAUDE.md`
 - 判断：行数？段完整性？有没有规则 vs 事实混入？柔化词有几个？索引的路径都真实存在吗（用 Glob 验证）？待做时效？占位符残留？
-- 输出：具体条款的原文引用（带行号），说明为什么它违反了 spec 的哪条
+- 输出：具体条款的原文引用（带行号），说明为什么它违反了标准的哪条
 
 ##### 2.2 journal 活跃度 + 模式识别
 
-- Read `references/journal-spec.md`
+- Read `references/journal.md`
 - Read 项目 `journal.md`（至少读前 150 行覆盖最近条目）
 - 判断：顶部条目多久前？倒序对吗？三段式完整吗？真实性如何（有没有凑数条目）？**最重要的**：最近 7-14 天的"坑了"字段里有没有**重复出现的词**？有 = 该抽成 rule 或 lesson
 - 输出：活跃度评级，指出具体该蒸馏成 rule 的重复模式
 
 ##### 2.3 MEMORY 索引 ↔ 磁盘一致性 + description 质量
 
-- Read `references/memory-spec.md`
+- Read `references/memory.md`
 - Bash 列磁盘：`ls .claude/memory/*.md | grep -v MEMORY.md | xargs -n1 basename`
 - Read `.claude/memory/MEMORY.md` 取索引
 - 判断：orphan（磁盘有索引无）/ dead（索引有磁盘无）？description 是否带具体关键词（还是"关于 X 的事情"这种无效描述）？有没有禁用的 `feedback_*.md` 或独立的 `decisions.md`？
@@ -208,28 +208,28 @@ wc -l CLAUDE.md journal.md 2>/dev/null
 
 ##### 2.4 .claude/rules/ 效力
 
-- Read `references/rules-spec.md`
+- Read `references/rules.md`
 - Read 项目每份 `.claude/rules/*.md`
 - 判断：命令式 vs 原则式？有触发锚点吗？解释 why 吗？paths 作用域合理吗？和 `~/.claude/rules/` 有没有重复？
 - 输出：具体规则的原文 + 该怎么改（给重写示例）
 
 ##### 2.5 lessons/ 蒸馏效率
 
-- Read `references/lessons-spec.md`
+- Read `references/lessons.md`
 - 逐份 Read `lessons/*.md`
 - 判断：每份 lesson 结尾有"可复用规则"段吗？规则有没有抽到 `.claude/rules/` 去？有单薄到该降级为 journal 的吗？有过长该拆的吗？命名能 5 秒猜出主题吗？
 - 输出：哪些 lesson 该抽 rule / 哪些该合并 / 哪些该 archive
 
 ##### 2.6 docs/ 和 workspace/ 纪律
 
-- Read `references/docs-spec.md` / `references/workspace-spec.md`
+- Read `references/docs.md` / `references/workspace.md`
 - 扫 `docs/` 和 `workspace/`
 - 判断：docs 有没有误放 Claude 规则？workspace 有没有误放耗时产物（eval 结果 / LLM 生成）？docs 归档纪律？编号一致性？
 - 输出：该挪的文件列表 + 目标位置
 
 ##### 2.7 .gitignore 配置闭环
 
-- Read `references/gitignore-spec.md`
+- Read `references/gitignore.md`
 - Read 项目 `.gitignore`
 - 判断：memory 白名单完整吗？`settings.local.json` 忽略吗？`.env` 覆盖吗？`workspace/tmp/` 吗？
 - 输出：缺失的必须项 + 敏感泄漏风险
@@ -248,7 +248,7 @@ wc -l CLAUDE.md journal.md 2>/dev/null
 # {项目名} 深度审查报告（{YYYY-MM-DD}）
 
 **路径**：$TARGET_PATH
-**基于标准**：references/*.md（8 份 spec）
+**基于标准**：references/*.md（8 份标准）
 **总评**：一句话项目协作层健康度判断（健康 / 一般 / 需整治）
 
 ---
@@ -326,18 +326,18 @@ wc -l CLAUDE.md journal.md 2>/dev/null
 
 不要默认全改。用户没看清就同意的后果是大量不可逆改动。
 
-#### 2. 按 references/ 标准逐条执行
+#### 2. 按 references/ 里的标准逐条执行
 
 每条改动都要：
 
-- Read 对应 references/*-spec.md（例如改 CLAUDE.md 前 Read `claudemd-spec.md`）
+- Read 对应 references/*.md（例如改 CLAUDE.md 前 Read `claudemd.md`）
 - 做改动（Edit / Write / Bash）
 - 改完后立即验证（Read 改后文件 / 跑 Glob / 看行数）
 - 向用户报告本条完成，等确认前不推进
 
 #### 3. 改完同步 journal
 
-按 `journal-spec.md` 格式追加一条到 `journal.md` 顶部：
+按 `journal.md` 格式追加一条到 `journal.md` 顶部：
 
 ```markdown
 ## {YYYY-MM-DD} 项目协作层整改
@@ -350,7 +350,7 @@ wc -l CLAUDE.md journal.md 2>/dev/null
 
 ### apply 硬约束
 
-- **读 spec 不凭记忆**：每条改动都要 Read 对应 spec 文件确认标准
+- **读标准不凭记忆**：每条改动都要 Read 对应标准文件确认标准
 - **用户逐条或批量授权**：没授权不改
 - **可逆性优先**：能小步改的不大步改，每步完成后汇报
 - **拒绝超出报告范围的扩展**：用户说"顺便也把 docs/ 重组一下吧"超出了 audit 范围 → 建议先重跑 audit 再决定

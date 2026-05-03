@@ -6,7 +6,7 @@
 - **audit** — AI 深度审查已有项目，出带原文引用的诊断报告（只读）
 - **apply** — 按报告建议改项目（用户逐条授权）
 
-三件事共享一份"项目协作层标准"（`references/` 下 8 份 spec），从 KOX-CLI 项目的 487 行 CLAUDE.md → 69 行整理经验抽出来，跑通后公开。
+三件事共享一份"项目协作层标准"（`references/` 下 8 份标准），从 一个真实项目的 487 行 CLAUDE.md → 69 行整理经验抽出来，跑通后公开。
 
 ---
 
@@ -21,7 +21,7 @@ Claude Code 原生支持 CLAUDE.md、auto-memory、hooks、slash commands，但*
 
 这些问题的答案是**标准**（不是工具）。本 skill 做两件事：
 
-1. **把标准写死在 `references/*.md`** —— 8 份 spec 各覆盖一个方面（CLAUDE.md / journal / memory / rules / lessons / docs / workspace / .gitignore），每份都说明"应该长什么样 / 为什么这样 / 判断标准 / 反模式 / 示例"
+1. **把标准写死在 `references/*.md`** —— 8 份标准各覆盖一个方面（CLAUDE.md / journal / memory / rules / lessons / docs / workspace / .gitignore），每份都说明"应该长什么样 / 为什么这样 / 判断标准 / 反模式 / 示例"
 2. **用 Claude 自己做 init / audit / apply** —— 不是 bash 脚本检查文件名，是真读项目内容 + 读标准，做主观判断
 
 ---
@@ -58,7 +58,7 @@ git clone https://github.com/ZOO-AiiiPM/claude-project-skill.git .claude/skills/
 
 或直接描述意图：
 
-> 帮我在 /Users/you/projects/ 下建一个新项目 "KOX-CLI"，描述是 "把 KOX 营销平台封装成 Claude Code skill"
+> 帮我在 /Users/you/projects/ 下建一个新项目 "notes-sync"，描述是 "把本地 Markdown 笔记增量同步到 S3 的 CLI"
 
 Claude 会：
 1. 校验目标路径为空
@@ -121,18 +121,18 @@ Claude 会把上一次 audit 报告里的建议逐条列出来让你选：全部
 
 | 文件 | 管什么 |
 |------|-------|
-| `claudemd-spec.md` | CLAUDE.md 行数、段、规则 vs 事实边界 |
-| `journal-spec.md` | journal.md 倒序、三段格式、活跃度阈值 |
-| `memory-spec.md` | .claude/memory/ 命名、frontmatter、索引一致性 |
-| `rules-spec.md` | .claude/rules/ 命令式、paths 作用域 |
-| `lessons-spec.md` | lessons/ 叙事标准、蒸馏链位置 |
-| `docs-spec.md` | docs/ 人读文档、编号、archive |
-| `workspace-spec.md` | workspace/ 临时产物、gitignore 覆盖 |
-| `gitignore-spec.md` | .gitignore 必须段、memory 白名单 |
+| `claudemd.md` | CLAUDE.md 行数、段、规则 vs 事实边界 |
+| `journal.md` | journal.md 倒序、三段格式、活跃度阈值 |
+| `memory.md` | .claude/memory/ 命名、frontmatter、索引一致性 |
+| `rules.md` | .claude/rules/ 命令式、paths 作用域 |
+| `lessons.md` | lessons/ 叙事标准、蒸馏链位置 |
+| `docs.md` | docs/ 人读文档、编号、archive |
+| `workspace.md` | workspace/ 临时产物、gitignore 覆盖 |
+| `gitignore.md` | .gitignore 必须段、memory 白名单 |
 
 每份结构一致：**应该长什么样 / 为什么这样 / 判断标准 / 反模式 / 示例**。
 
-可以单独读这些 spec 作为写作参考，不一定要用 skill 本身。
+可以单独读这些标准作为写作参考，不一定要用 skill 本身。
 
 ---
 
@@ -143,15 +143,15 @@ claude-project-skill/
 ├── SKILL.md                   # 主入口（init / audit / apply 路由）
 ├── README.md                  # 本文件
 ├── LICENSE                    # MIT
-├── references/                # 8 份标准 spec
-│   ├── claudemd-spec.md
-│   ├── journal-spec.md
-│   ├── memory-spec.md
-│   ├── rules-spec.md
-│   ├── lessons-spec.md
-│   ├── docs-spec.md
-│   ├── workspace-spec.md
-│   └── gitignore-spec.md
+├── references/                # 8 份标准文档
+│   ├── claudemd.md
+│   ├── journal.md
+│   ├── memory.md
+│   ├── rules.md
+│   ├── lessons.md
+│   ├── docs.md
+│   ├── workspace.md
+│   └── gitignore.md
 └── template/                  # init 时拷贝的骨架
     ├── CLAUDE.md              # 瘦骨架（< 80 行）
     ├── journal.md             # 倒序时间线骨架
@@ -181,7 +181,7 @@ claude-project-skill/
 
 ## 贡献
 
-标准本身是最有价值的部分 —— 用到的人越多，spec 越容易被打磨。欢迎：
+标准本身是最有价值的部分 —— 用到的人越多，标准越容易被打磨。欢迎：
 
 - PR 改进 `references/*.md`（补反模式、加示例、修改条款）
 - Issue 报告你的项目 audit 出来觉得不合理的判断
@@ -205,4 +205,4 @@ MIT. 见 [LICENSE](LICENSE)。
 
 ## 来源
 
-整套标准从 KOX-CLI 项目整理经验抽出（CLAUDE.md 487 → 69 行，建立 journal/memory/rules/lessons 分工），跑通后公开。经历过的踩坑有多篇 lesson 案例作为 references 的实证支撑。
+整套标准从一个真实项目的整理经验抽出（CLAUDE.md 487 → 69 行，建立 journal/memory/rules/lessons 分工），跑通后公开。经历过的踩坑有多篇 lesson 案例作为 references 的实证支撑。

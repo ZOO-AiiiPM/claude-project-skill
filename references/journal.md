@@ -98,12 +98,12 @@ lesson 详细叙事（复杂反转 / 多步踩坑的完整故事）
 ### 好的条目
 
 ```markdown
-## 2026-05-02 搜索接口改走分页
+## 2026-05-02 登录切 refresh token
 
-- **做了**：search-library 接口改用分页参数（page/size），替代旧的 offset 方式。改了 scripts/kox.py 的 3 处调用点
-- **坑了**：第一版 page 从 0 开始，线上测试 100% 返回空列表。抓 raw 才发现服务端 page 从 1 开始，文档没写
-- **学到**：KOX 分页接口 page 从 1 开始，不是 0。这条该写进 `.claude/memory/reference_kox_api_rules.md` 的分页段
-- **决策**：保留 size 默认 20 | 对齐前端默认值 | 考虑过 50 但怕 response 太大
+- **做了**：login 接口返回从单 token 改为 `{access, refresh}` 对。client 3 处调用点同步更新
+- **坑了**：第一版 refresh 过期时间填的秒数，JWT 库要毫秒，所有 token 1 秒就失效。抓库 changelog 才看到单位
+- **学到**：这个 JWT 库过期时间单位是**毫秒**，文档没明说。该写进 `.claude/memory/reference_jwt_library.md`
+- **决策**：refresh 有效期 7 天 | 对齐团队其他产品 | 考虑过 30 天但安全组反对
 ```
 
 三段都有信息含量，"学到"明确指出了下一步（迁到 memory），"决策"有 why 有替代方案。
@@ -113,7 +113,7 @@ lesson 详细叙事（复杂反转 / 多步踩坑的完整故事）
 ```markdown
 ## 5/2
 
-今天继续做搜索模块，修了一些 bug，晚上改了 skill，挺顺利的。
+今天继续做登录模块，修了一些 bug，晚上优化了下代码，挺顺利的。
 ```
 
 日期格式不统一、无结构、没信息量、无行动项。这种条目存在会稀释 journal 价值。

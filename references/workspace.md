@@ -98,20 +98,20 @@ docs/ 是给人读的正式文档。`curl_test.sh` / `raw_api_response.json` 这
 ```
 workspace/
 ├── tmp/
-│   ├── check_deploy.sh         # 今天写的检查脚本，跑完就扔
+│   ├── check_health.sh         # 今天写的健康检查脚本，跑完就扔
 │   └── raw_response_403.json   # 某个报 403 的 API 原始返回，debug 用
 ├── bak/
-│   └── kox.py.before-refactor  # 大重构前备份
+│   └── main.py.before-refactor # 大重构前备份
 └── scratch/
-    └── eval_quick_test.py      # 快速验证想法的脚本
+    └── quick_test.py           # 快速验证想法的脚本
 ```
 
 ### 问题用法
 
 ```
 workspace/
-├── final_eval_results_2026-04-30.json   # "final"说明是成果，应该进 docs/ 或 evaluations/
-├── embedding_cache/                      # 花钱算的向量，应该有专门目录并 gitignore 规则保护
-├── important_design.md                   # 重要设计文档，应该进 docs/
-└── old_notes.md                          # 已 3 个月没动，应 archive 或删
+├── final_benchmark_2026-05-02.json   # "final"说明是成果，应该进 docs/ 或 benchmarks/
+├── model_cache/                       # 下载的大模型权重，应有专门目录 + 独立 gitignore 规则保护
+├── important_design.md                # 重要设计文档，应该进 docs/
+└── old_notes.md                       # 已 3 个月没动，应 archive 或删
 ```

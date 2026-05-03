@@ -21,7 +21,7 @@ Claude Code 自带的 auto-memory 系统。Claude 在对话中遇到值得持久
 ### 文件命名：`{type}_{topic}.md`
 
 - **type**：`reference` / `project` / `user` 三选一
-- **topic**：小写、下划线分隔、带关键词（`server_access` / `kox_api_rules` / `email_channel_id_resolution`）
+- **topic**：小写、下划线分隔、带关键词（`server_access` / `payment_errors` / `email_channel_resolution`）
 - **禁止的 type**：~~`feedback`~~（用户纠正改进规则类用 `.claude/rules/{主题}.md`）、~~`decisions`~~（决策合并进 journal + `project_*.md`）
 
 ### Frontmatter（必须）
@@ -130,37 +130,44 @@ Claude 启动时只读 MEMORY.md 前 200 行，然后通过索引的 description
 
 ```markdown
 ---
-name: 服务器 SSH 访问
-description: 主服务器 45.78.192.23 SSH 连接、sshpass 密码、Gateway 端口 18789、skill 部署路径
+name: 数据库访问
+description: 生产 PostgreSQL 连接串、只读副本、迁移命令、备份 S3 桶位置
 type: reference
 ---
 
-## SSH
+## 主库
 
-- IP: 45.78.192.23
-- User: admin
-- Password: (查 ~/.claude/reference/keys.md)
-- 推荐: `sshpass -p <pass> ssh admin@45.78.192.23`
+- Host: `db.internal.example.com`
+- Port: 5432
+- User: `app_prod`（密码查 1Password "prod-db"）
+- SSL 必须开（ca 证书在 `~/.postgresql/root.crt`）
 
-## Gateway
+## 只读副本
 
-- 端口 18789，HTTP 入口
-- 重启命令：`sudo systemctl restart gateway`
+- Host: `db-ro.internal.example.com`
+- 只用于报表 / 数据导出，延迟 < 5s
 
-## 部署路径
+## 迁移
 
-- /opt/skills/{skill-name}/
+- 从项目根执行：`alembic upgrade head`
+- 回滚：`alembic downgrade -1`
+- 生产迁移必须在工作时间外跑（lock 风险）
+
+## 备份
+
+- S3 桶：`s3://company-db-backup/prod/`
+- 每日 03:00 UTC 自动备份
 ```
 
-description 含 4 个关键词（IP、sshpass、端口、部署路径），Claude 在问 "怎么连服务器" / "skill 部署到哪" 时都能命中。
+description 含 4 个关键词（PostgreSQL / 只读副本 / 迁移 / S3 备份），Claude 在问 "怎么连库" / "怎么回滚迁移" / "备份在哪" 时都能命中。
 
 ### 好的 MEMORY.md 索引段
 
 ```markdown
-- [KOX API 错误码](reference_kox_api_rules.md) — 10001-10004 / 50002 子码 / 采集 vs 收录 / task_status / 空壳账号诊断
+- [支付网关错误码](reference_payment_errors.md) — INSUFFICIENT_FUNDS / CARD_DECLINED / RATE_LIMIT_EXCEEDED / 各错误码的重试策略 / 幂等键机制
 ```
 
-钩子里塞了 5 个可能被用户问起的具体词，命中面广。
+钩子里塞了 5 个可能被用户问起的具体词（错误码名 / 重试 / 幂等），命中面广。
 
 ### 坏的 description
 
