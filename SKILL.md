@@ -2,7 +2,7 @@
 name: project-setup
 description: >
   Claude Code 项目骨架 + 深度审查 + 按标准改造。三个子场景：
-  ① init — 用 template/ 骨架建新项目（CLAUDE.md / journal.md / .claude/memory+rules+hooks / lessons / docs / workspace 全套），填占位符 + 配 autoMemoryDirectory + 预置 journal 提醒 hook。
+  ① init — 用 template/ 骨架建新项目（CLAUDE.md / journal.md / .claude/memory+rules+hooks / lessons / docs / workspace 全套），填占位符 + 配 autoMemoryDirectory + 默认启用 turn-reflect hook（每 5 轮 journal 提醒 + 每 10 轮蒸馏提醒）。
   ② audit — AI 驱动的深度审查，Claude 读 references/ 里的标准+ 读项目内容做主观判断，出带原文引用的诊断报告（不改文件）。
   ③ apply — 用户批准审查报告后，Claude 按 references/ 里的标准具体改项目。
 
@@ -148,7 +148,7 @@ fi
 1. 打开 CLAUDE.md 的"项目硬规则"段，填具体规则
 2. 第一次有实质进展后给 journal.md 追加第一条
 3. 推 GitHub：gh repo create <org>/<name> --source=. --public --push
-4. 不要 5 轮 journal 提醒 hook 就删 .claude/settings.local.json 里的 hooks 段
+4. 不要 turn-reflect hook（默认每 5 轮 journal + 每 10 轮蒸馏）就删 .claude/settings.local.json 里的 hooks 段；只想调阈值就改 .claude/hooks/turn-reflect.sh 顶部的 JOURNAL_EVERY / DISTILL_EVERY
 5. 新开 Claude session，验证 CLAUDE.md 硬规则自动加载
 ```
 

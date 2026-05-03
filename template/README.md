@@ -26,6 +26,13 @@
 
 详见 `CLAUDE.md` 的"跨 Session 协作"段。
 
-## 预置 hook
+## 预置 hook：turn-reflect（默认启用）
 
-`.claude/hooks/journal-turn-counter.sh` — 每 5 轮对话后提醒 Claude 考虑 append journal。通过 `settings.local.json` 的 `hooks.Stop` 启用；不想要时删 `hooks` 段即可。阈值在脚本顶部 `THRESHOLD` 改。
+`.claude/hooks/turn-reflect.sh` 在每轮对话后触发，两级提醒：
+
+- **每 5 轮** — 判断本段要不要 append journal（有决策 / 踩坑 / 学到就写，否则跳过）
+- **每 10 轮** — 额外回看最近活动，判断要不要蒸馏成 lesson / rules / CLAUDE.md 硬规则
+
+不用 Claude 问、不用你操作，它自己判断自己写。10 轮时两级同时触发。
+
+**配置**：`.claude/settings.local.json` 的 `hooks.Stop` 段。阈值在 `turn-reflect.sh` 顶部 `JOURNAL_EVERY` / `DISTILL_EVERY` 改。关闭整个 hook：删 settings 里的 `hooks` 段。

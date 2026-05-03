@@ -1,5 +1,5 @@
 {
-  "//": "复制成 settings.local.json 后：1) 把 autoMemoryDirectory 改为当前项目的绝对路径 2) 如不想启用 journal 提醒 hook 可删 hooks 段",
+  "//": "复制成 settings.local.json 后：1) 把 autoMemoryDirectory 改为当前项目的绝对路径 2) 如不想要 turn-reflect hook（每 5 轮 journal 提醒 + 每 10 轮蒸馏提醒），删 hooks 段即可",
   "autoMemoryDirectory": "/绝对路径/到项目/.claude/memory",
   "permissions": {
     "allow": []
@@ -10,7 +10,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/journal-turn-counter.sh"
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/turn-reflect.sh"
           }
         ]
       }

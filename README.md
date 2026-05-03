@@ -115,6 +115,39 @@ Claude 会把上一次 audit 报告里的建议逐条列出来让你选：全部
 
 ---
 
+## 自动维护：turn-reflect hook（默认启用）
+
+init 会预装一个 `Stop` 事件的 hook，**每轮对话后触发**。两级节奏：
+
+| 频率 | 触发 Claude 做什么 |
+|------|------------------|
+| **每 5 轮** | 判断本段要不要 append journal（有决策 / 踩坑 / 学到就写，否则跳过） |
+| **每 10 轮** | 额外回看最近活动，判断要不要蒸馏到 lesson / rules / CLAUDE.md 硬规则 |
+
+10 轮时两级同时触发。Claude 自己判断要不要写，**没有值得记的事就静默跳过**，不打扰你。
+
+### 为什么这是亮点
+
+大部分 Claude Code 项目有两个隐性困境：
+
+- **journal 建了没人写**：没钩子，每天都在等"下次记"，实际就没下次
+- **规律已反复暴露但没沉淀**：重复踩的坑、用户纠正过的规则留在对话里，下次 session 就丢了
+
+turn-reflect 把这两件事变成**自动节奏**：
+- journal 被"每 5 轮问一次"逼着活
+- 蒸馏链（journal → lesson → rules → CLAUDE.md）被"每 10 轮扫一次"逼着流动
+
+项目的协作层不再靠你自律，它自己会长。
+
+### 配置
+
+- **脚本**：`.claude/hooks/turn-reflect.sh`
+- **启用**：`.claude/settings.local.json` 的 `hooks.Stop`（init 默认写入）
+- **调阈值**：改脚本顶部 `JOURNAL_EVERY` / `DISTILL_EVERY`
+- **完全关闭**：删 `settings.local.json` 里的 `hooks` 段
+
+---
+
 ## 标准在哪里
 
 所有判断依据都在 `references/`：
@@ -165,7 +198,7 @@ claude-project-skill/
         ├── memory/MEMORY.md
         ├── rules/
         └── hooks/
-            └── journal-turn-counter.sh   # 每 5 轮提醒 append journal
+            └── turn-reflect.sh            # 每 5 轮 journal 提醒 + 每 10 轮蒸馏提醒（默认启用）
 ```
 
 ---
