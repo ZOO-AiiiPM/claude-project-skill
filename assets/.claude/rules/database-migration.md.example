@@ -1,0 +1,44 @@
+---
+paths:
+  - "migrations/**/*.sql"
+  - "migrations/**/*.py"
+---
+
+# 数据库迁移硬规则（示例 / 样板）
+
+<!--
+这是一个**规则样板**，展示 `.claude/rules/*.md` 的写法。
+启用：重命名为 `database-migration.md`（去掉 `.example` 后缀）。
+不想用：直接删本文件。
+
+规则来源：真实踩坑 / 用户重复纠正 / 严重事故。没来源的"通用建议"不该进项目 rules，放 `~/.claude/rules/` 全局或不写。
+
+格式要点：
+- frontmatter `paths:` 限定触发文件（上面 migrations/ 只在改迁移时加载，不污染其他任务）
+- 每条规则：命令式（禁止 X / 必须 Y）+ 触发锚点（X 时）+ 解释 why（因为机制 Z）+ 示例（代码片段）
+- 禁止柔化词（尽量 / 可能 / 建议）—— 模型当建议跳过
+-->
+
+违反会导致生产锁表或数据丢失。来源：事故复盘 + 团队纠正两轮。
+
+## 1. 加 NOT NULL 列必须分两步
+
+Postgres 给已有大表加 `NOT NULL` 列且无默认值 = 全表扫 + 表锁，大表直接 outage。
+
+**做法**：
+
+```sql
+-- Step 1（这次迁移）
+ALTER TABLE users ADD COLUMN tier TEXT DEFAULT 'free';
+
+-- Step 2（下次迁移，确认无回滚后）
+ALTER TABLE users ALTER COLUMN tier SET NOT NULL;
+```
+
+## 2. DROP COLUMN 必须分两次发布
+
+先停写（代码不再写这列 + 部署），等一个版本确认无回滚诉求，再真 DROP。回滚代码后如果列已 DROP，老代码启动即崩。
+
+## 3. 生产迁移必须在工作时间外跑
+
+高峰期跑迁移 = 锁行影响活跃请求。周末或凌晨跑，并在运行 runbook 里记录回滚步骤。

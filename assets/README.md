@@ -1,0 +1,39 @@
+# {PROJECT_NAME}
+
+{一句话项目描述}
+
+> 本项目从 [claude-project-skill](https://github.com/ZOO-AiiiPM/claude-project-skill) 的 `assets/` 骨架创建。
+
+## 快速开始
+
+**推荐**：直接用 `/project-setup init <name> <desc> <abs_path>`，占位符和 `autoMemoryDirectory` 会自动配好，不用手动改。
+
+**手动拷贝场景**：
+1. 替换占位符 `{PROJECT_NAME}` / `{一句话项目描述}` 在 `CLAUDE.md` / `journal.md` / `README.md` 里
+2. `cp .claude/settings.local.json.example .claude/settings.local.json`
+3. 把 `autoMemoryDirectory` 改成本项目的**绝对路径**（如 `/Users/you/projects/my-project/.claude/memory`）
+4. 读 `CLAUDE.md` 的"跨 Session 协作"段了解 journal / memory / rules 分工
+
+## 目录说明
+
+- `CLAUDE.md` — 每次 session 自动加载的规则和索引（目标 < 80 行）
+- `journal.md` — 倒序时间线（进度 / 反思 / 决策），session 开头 Claude 读顶部几条
+- `.claude/memory/` — 事实（服务器 / 账号 / API / 命令），Claude 对话中自动维护
+- `.claude/rules/` — 长规则 / 按主题拆 / 支持 `paths:` 作用域触发
+- `.claude/hooks/turn-reflect.sh` — 每 5 轮提 journal、每 10 轮提蒸馏（见下方）
+- `lessons/` — 复杂反转 / 多步踩坑的完整案例叙事
+- `docs/` — 给人读的产品文档（编号前缀保证阅读顺序）
+- `workspace/` — 临时工作区（tmp / bak / scratch 被 gitignore）
+
+**正式项目产物**（eval 结果 / LLM 生成 / 爬虫数据 / embedding）按项目需要在根建独立顶级目录（`eval-results/` / `llm-outputs/` / `scraped-data/` / `embeddings/`），配独立 gitignore。**不要塞 workspace**（workspace 语义是"临时"，放耗时产物后清理时风险大）。
+
+## 预置 hook：turn-reflect（默认启用）
+
+`.claude/hooks/turn-reflect.sh` 在每轮对话后触发，两级提醒：
+
+- **每 5 轮** — 判断本段要不要 append journal（有决策 / 踩坑 / 学到就写，否则跳过）
+- **每 10 轮** — 额外回看最近活动，判断要不要蒸馏成 lesson / rules / CLAUDE.md 硬规则
+
+Claude 自己判断自己写，不打扰你。10 轮时两级同时触发。
+
+**配置**：`.claude/settings.local.json` 的 `hooks.Stop` 段。阈值在 `turn-reflect.sh` 顶部 `JOURNAL_EVERY` / `DISTILL_EVERY` 改。关闭整个 hook：删 settings 里的 `hooks` 段。

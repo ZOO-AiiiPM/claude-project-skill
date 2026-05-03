@@ -62,7 +62,7 @@ git clone https://github.com/ZOO-AiiiPM/claude-project-skill.git .claude/skills/
 
 Claude 会：
 1. 校验目标路径为空
-2. 从 `template/` 拷完整骨架
+2. 从 `assets/` 拷完整骨架
 3. 替换 `{PROJECT_NAME}` 和 `{一句话项目描述}` 占位符
 4. 配好 `autoMemoryDirectory` 绝对路径
 5. git init + 首次 commit
@@ -185,7 +185,7 @@ claude-project-skill/
 │   ├── docs.md
 │   ├── workspace.md
 │   └── gitignore.md
-└── template/                  # init 时拷贝的骨架
+└── assets/                    # init 时拷贝的骨架（遵循 Anthropic skill assets 约定）
     ├── CLAUDE.md              # 瘦骨架（< 80 行）
     ├── journal.md             # 倒序时间线骨架
     ├── README.md              # 项目介绍模板
@@ -218,7 +218,7 @@ claude-project-skill/
 
 - PR 改进 `references/*.md`（补反模式、加示例、修改条款）
 - Issue 报告你的项目 audit 出来觉得不合理的判断
-- PR 改进 `template/` 骨架
+- PR 改进 `assets/` 骨架
 - 在自己的项目里试 init / audit / apply，回来告诉我们哪些场景 skill 没接住
 
 ---
