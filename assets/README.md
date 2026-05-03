@@ -27,14 +27,17 @@
 
 **正式项目产物**（eval 结果 / LLM 生成 / 爬虫数据 / embedding）按项目需要在根建独立顶级目录（`eval-results/` / `llm-outputs/` / `scraped-data/` / `embeddings/`），配独立 gitignore。**不要塞 workspace**（workspace 语义是"临时"，放耗时产物后清理时风险大）。
 
-## 预置 hook：turn-reflect（默认启用）
+## 预置 hook（默认启用）
 
-`.claude/hooks/turn-reflect.sh` 在每轮对话后触发，三级提醒：
+两个 hook 配合，把跨 session 同步和规则维护自动化：
 
+**`session-brief.sh`（SessionStart 触发）** —— 新 session 开始时让 Claude 读 journal 顶部 + MEMORY.md + CLAUDE.md 待做段，生成一段简短 brief（"上次做到 X / 当前焦点 Y / 今天接着做 Z"）。不用用户手动讲"我们上次做到哪里"。
+
+**`turn-reflect.sh`（Stop 触发，三级）** —— 每轮对话后：
 - **每 5 轮** — journal 提醒：判断要不要 append journal（有决策 / 踩坑 / 学到就写）
 - **每 10 轮** — 蒸馏提醒：判断要不要蒸馏到 lesson / rules（附带 lesson / rule 写作标准）
 - **每 30 轮** — 规则层 review 提醒：扫 CLAUDE.md + rules/ 找重复 / 冲突 / 可合并 / 可升级 / 过期的规则
 
 Claude 自己判断自己写，没值得记 / 没发现问题就静默跳过。30 轮时三级同时触发。
 
-**配置**：`.claude/settings.local.json` 的 `hooks.Stop` 段。阈值在 `turn-reflect.sh` 顶部 `JOURNAL_EVERY` / `DISTILL_EVERY` / `REVIEW_EVERY` 改。关某一级把对应阈值设为大值（如 `999999`）。关闭整个 hook：删 settings 里的 `hooks` 段。
+**配置**：`.claude/settings.local.json` 的 `hooks.SessionStart` 和 `hooks.Stop` 两段。阈值在 `turn-reflect.sh` 顶部 `JOURNAL_EVERY` / `DISTILL_EVERY` / `REVIEW_EVERY` 改。关某一级把阈值设为大值（如 `999999`）；关某个 hook 删对应 `hooks.{事件}` 子段即可。
