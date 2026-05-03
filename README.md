@@ -2,13 +2,14 @@
 
 [Claude Code](https://docs.claude.com/en/docs/claude-code) skill，给项目铺标准的协作骨架：`CLAUDE.md` / `journal.md` / `.claude/memory/` / `.claude/rules/` / `.claude/hooks/` / `lessons/` / `docs/`。
 
-三个子命令：
+四个子命令：
 
 - `/project-setup init <name> <desc> <abs_path>` — 对话式起新项目
 - `/project-setup audit [path]` — 按标准扫已有项目，出带原文引用的诊断报告（只读）
-- `/project-setup apply [path]` — 按 audit 报告改项目（逐条授权）
+- `/project-setup apply [path]` — 按 audit / review 报告改项目（逐条授权）
+- `/project-setup review [path]` — 规则层质量审查（扫 CLAUDE.md + rules/ 去重 / 合并 / 升级 / archive）
 
-三个动作共用同一份标准（`references/` 下 8 份文档），init 按它建、audit 按它比、apply 按它改。
+四个动作共用同一份标准（`references/` 下 8 份文档）。audit 是全项目宏观体检，review 是规则层日常维护（hook 每 30 轮自动触发一次）。
 
 ---
 
@@ -93,7 +94,23 @@ audit 只读，不改文件。
 /project-setup apply
 ```
 
-Claude 会列出 audit 报告里的所有建议，让你选全部接受 / 选择性接受 / 跳过，按你授权的条目逐条改，每步 Read 对应 `references/*.md` 作标准、改完即时验证。
+Claude 会列出 audit / review 报告里的所有建议，让你选全部接受 / 选择性接受 / 跳过，按你授权的条目逐条改，每步 Read 对应 `references/*.md` 作标准、改完即时验证。
+
+### 规则层 review
+
+```
+/project-setup review
+```
+
+或：
+
+> 看看我的规则还有啥问题
+
+只扫 CLAUDE.md + `.claude/rules/`，找重复规则 / 冲突规则 / 可合并 / 可升级到全局 / 过期 / 含柔化词的规则，输出建议清单。
+
+**和 audit 的差别**：audit 是全项目 8 维度宏观体检，review 聚焦规则层、更轻、更常用。项目跑起来后规则会越写越多，review 负责定期"剪枝"—— 让规则集随项目演化而不是只增不减。
+
+review 只读，不改文件；要改走 apply 或手动。
 
 ---
 
@@ -101,16 +118,18 @@ Claude 会列出 audit 报告里的所有建议，让你选全部接受 / 选择
 
 init 默认装一个 `Stop` 事件 hook，每轮对话后触发：
 
-- **每 5 轮**：判断要不要 append journal（有决策 / 踩坑 / 学到就写，否则跳过）
-- **每 10 轮**：额外判断要不要蒸馏成 lesson / rules / CLAUDE.md 硬规则
+- **每 5 轮** — journal 提醒：判断要不要 append journal（有决策 / 踩坑 / 学到就写，否则跳过）
+- **每 10 轮** — 蒸馏提醒：判断要不要蒸馏成 lesson / rules / CLAUDE.md 硬规则（附带 lesson / rule 的写作标准，Claude 照着落地）
+- **每 30 轮** — 规则层 review 提醒：扫 CLAUDE.md + rules/ 找重复 / 冲突 / 可合并 / 可升级 / 过期的规则（等同 `/project-setup review` 自动触发一次）
 
-Claude 自己判断，没值得记的事就静默跳过。
+三级阈值对应三种粒度的维护：短周期记录、中周期蒸馏、长周期剪枝。Claude 自己判断，没值得记 / 没发现问题就静默跳过。
 
 **配置**：
 
 - 脚本 `.claude/hooks/turn-reflect.sh`
 - 启用/关闭：`.claude/settings.local.json` 的 `hooks.Stop` 段
-- 调阈值：改脚本顶部 `JOURNAL_EVERY` / `DISTILL_EVERY`
+- 调阈值：改脚本顶部 `JOURNAL_EVERY` / `DISTILL_EVERY` / `REVIEW_EVERY`
+- 想关某一级：对应阈值设为大值（如 `999999`）
 
 ---
 
@@ -137,7 +156,7 @@ Claude 自己判断，没值得记的事就静默跳过。
 
 ```
 claude-project-skill/
-├── SKILL.md              # init / audit / apply 路由
+├── SKILL.md              # init / audit / apply / review 路由
 ├── README.md
 ├── LICENSE               # MIT
 ├── references/           # 8 份标准文档
@@ -162,7 +181,7 @@ claude-project-skill/
 ## 不做的事
 
 - **init 目标路径非空时直接拒绝**。不覆盖、不合并、不备份。用户现有文件不可推测。
-- **audit 不改文件**。要改走 apply。
+- **audit / review 不改文件**。要改走 apply 或手动。
 - **占位符只替换 `{PROJECT_NAME}` 和 `{一句话项目描述}`**。不推断项目类型、不自动填服务器 IP、不加 boilerplate。
 - **不扩展到 migrate / clean / 删"垃圾"**。eval 数据、LLM 产物、爬虫数据误删不可恢复。
 

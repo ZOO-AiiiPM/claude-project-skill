@@ -29,11 +29,12 @@
 
 ## 预置 hook：turn-reflect（默认启用）
 
-`.claude/hooks/turn-reflect.sh` 在每轮对话后触发，两级提醒：
+`.claude/hooks/turn-reflect.sh` 在每轮对话后触发，三级提醒：
 
-- **每 5 轮** — 判断本段要不要 append journal（有决策 / 踩坑 / 学到就写，否则跳过）
-- **每 10 轮** — 额外回看最近活动，判断要不要蒸馏成 lesson / rules / CLAUDE.md 硬规则
+- **每 5 轮** — journal 提醒：判断要不要 append journal（有决策 / 踩坑 / 学到就写）
+- **每 10 轮** — 蒸馏提醒：判断要不要蒸馏到 lesson / rules（附带 lesson / rule 写作标准）
+- **每 30 轮** — 规则层 review 提醒：扫 CLAUDE.md + rules/ 找重复 / 冲突 / 可合并 / 可升级 / 过期的规则
 
-Claude 自己判断自己写，不打扰你。10 轮时两级同时触发。
+Claude 自己判断自己写，没值得记 / 没发现问题就静默跳过。30 轮时三级同时触发。
 
-**配置**：`.claude/settings.local.json` 的 `hooks.Stop` 段。阈值在 `turn-reflect.sh` 顶部 `JOURNAL_EVERY` / `DISTILL_EVERY` 改。关闭整个 hook：删 settings 里的 `hooks` 段。
+**配置**：`.claude/settings.local.json` 的 `hooks.Stop` 段。阈值在 `turn-reflect.sh` 顶部 `JOURNAL_EVERY` / `DISTILL_EVERY` / `REVIEW_EVERY` 改。关某一级把对应阈值设为大值（如 `999999`）。关闭整个 hook：删 settings 里的 `hooks` 段。
