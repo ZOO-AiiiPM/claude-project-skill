@@ -1,8 +1,8 @@
 # claude-project-skill
 
-claude-project-skill 是给 [Claude Code](https://docs.claude.com/en/docs/claude-code) 项目的**协作层标准 + 配套自动化**。Claude Code 原生能写 CLAUDE.md / memory / rules / hooks，但这些文件该装什么、各自边界在哪、跑几周后怎么维护，并没有现成答案 —— 结果常见的是 CLAUDE.md 越写越长、journal 建了没人写、规则越堆越多没人清。
+claude-project-skill 解决三类项目协作常见痛点：**跨 session 协作断层**（新 session 开始像白纸，不知道上次做到哪、当前焦点是什么），**项目膨胀失控**（规则越写越长、文件组织紊乱、事实和做法混在一起），**经验规则无法复用**（踩过的坑留在对话里下次 session 丢；沉淀的规则没有统一位置）。这些问题在项目跑起来几周后必然浮现。
 
-本 skill 把这些答案沉淀在 `references/` 8 份标准里，并给出 4 个子命令让 Claude 按标准办事、2 个预置 hook 让维护节奏自动化。**项目的规则集随演化自我维护，不会只增不减**。
+本 skill 是一套给 [Claude Code](https://docs.claude.com/en/docs/claude-code) 的标准 + 自动化：把"项目协作层怎么组织"的答案沉淀在 `references/` 8 份文档里，用 4 个子命令让 Claude 按标准办事、2 个预置 hook 让维护节奏自动化。**跨 session 状态自动同步、规则集随演化自我维护、踩过的坑经 journal → lesson → rules 蒸馏链成为可复用资产**。
 
 ## 子命令
 
