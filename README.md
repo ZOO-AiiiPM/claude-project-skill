@@ -1,8 +1,10 @@
 # claude-project-skill
 
-[Claude Code](https://docs.claude.com/en/docs/claude-code) skill，给项目铺标准的协作骨架：`CLAUDE.md` / `journal.md` / `.claude/memory/` / `.claude/rules/` / `.claude/hooks/` / `lessons/` / `docs/`。
+claude-project-skill 是给 [Claude Code](https://docs.claude.com/en/docs/claude-code) 项目的**协作层标准 + 配套自动化**。Claude Code 原生能写 CLAUDE.md / memory / rules / hooks，但这些文件该装什么、各自边界在哪、跑几周后怎么维护，并没有现成答案 —— 结果常见的是 CLAUDE.md 越写越长、journal 建了没人写、规则越堆越多没人清。
 
-四个子命令：
+本 skill 把这些答案沉淀在 `references/` 8 份标准里，并给出 4 个子命令让 Claude 按标准办事、2 个预置 hook 让维护节奏自动化。**项目的规则集随演化自我维护，不会只增不减**。
+
+## 子命令
 
 - `/project-setup init <name> <desc> <abs_path>` — 对话式起新项目
 - `/project-setup audit [path]` — 按标准扫已有项目，出带原文引用的诊断报告（只读）
@@ -185,15 +187,6 @@ claude-project-skill/
             ├── session-brief.sh
             └── turn-reflect.sh
 ```
-
----
-
-## 不做的事
-
-- **init 目标路径非空时直接拒绝**。不覆盖、不合并、不备份。用户现有文件不可推测。
-- **audit / review 不改文件**。要改走 apply 或手动。
-- **占位符只替换 `{PROJECT_NAME}` 和 `{一句话项目描述}`**。不推断项目类型、不自动填服务器 IP、不加 boilerplate。
-- **不扩展到 migrate / clean / 删"垃圾"**。eval 数据、LLM 产物、爬虫数据误删不可恢复。
 
 ---
 
