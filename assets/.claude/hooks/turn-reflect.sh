@@ -51,9 +51,7 @@ fi
 
 cat <<EOF
 {
-  "hookSpecificOutput": {
-    "hookEventName": "Stop",
-    "additionalContext": "$msg"
-  }
+  "decision": "block",
+  "reason": "$msg"
 }
 EOF
