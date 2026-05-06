@@ -29,14 +29,7 @@
 
 <!-- 写本项目真实踩过坑后沉淀出的规则。命令式 + 触发锚点 + 解释 why。删除本占位注释。
 
-下面是**通用参考示例**（按你的实际情况改写或删除，不是现成规则）：
-
-- 写 TypeScript 必须启用 `strict: true`（编译期抓隐式 any 比运行时查类型错误便宜一个数量级）
-- 改数据库 migration 前必须先 dry-run（生产上直接跑有锁表 / 不可回滚风险）
-- 外部 API 调用必须设超时（无超时的挂起请求会占满 worker 线程）
-- API 密钥只进 `.env.local`，禁止 commit（历史泄露要 `git filter-repo` 清 + 轮换凭据）
-
-**原则**：规则来自真实踩坑或用户纠正 2+ 次，不凭空想通用规则。通用的已在 `~/.claude/rules/`。
+**原则**：规则来自真实踩坑或用户纠正 2+ 次，不凭空想通用规则。通用的已在 `~/.claude/rules/`。写法参考 skill 的 `references/claudemd.md` 和 `references/rules.md`。
 -->
 
 ---

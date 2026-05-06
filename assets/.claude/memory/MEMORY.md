@@ -13,13 +13,5 @@
 - ~~feedback~~ 已废弃 —— 规则类内容进 `.claude/rules/{主题}.md`
 - ~~decisions~~ 已废弃 —— 决策进 journal.md，决策产生的"当前状态"进 `project_*.md`
 
-description 要塞具体关键词（"生产 PostgreSQL 连接串 / 只读副本 / 迁移命令 / S3 备份桶"），不要写"关于 X 的事情"—— 后者 Claude 命中不到。
-
----
-
-通用参考示例（写完第一条真实索引后删除本段占位）：
-
-- [数据库访问](reference_database.md) — 生产 PostgreSQL 连接串 / 只读副本 / 迁移命令 / S3 备份桶
-- [支付网关错误码](reference_payment_errors.md) — INSUFFICIENT_FUNDS / CARD_DECLINED / RATE_LIMIT / 重试策略 / 幂等键机制
-- [已部署组件](project_deployed_services.md) — auth-service v2.3 / 用户 API / 后台任务队列 / 最后部署时间
+description 要塞具体关键词（避免"关于 X 的事情"这种命中不到的写法）。写法标准与示例：skill 的 `references/memory.md`。
 -->

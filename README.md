@@ -182,7 +182,6 @@ claude-project-skill/
         ├── settings.local.json.example
         ├── memory/MEMORY.md
         ├── rules/
-        │   └── database-migration.md.example   # 规则文件样板
         └── hooks/
             ├── session-brief.sh
             └── turn-reflect.sh
