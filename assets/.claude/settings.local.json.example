@@ -10,7 +10,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-brief.sh"
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-brief.js\""
           }
         ]
       }
@@ -20,7 +20,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/turn-reflect.sh"
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/turn-reflect.js\""
           }
         ]
       }

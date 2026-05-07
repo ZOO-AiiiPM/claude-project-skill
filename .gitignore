@@ -6,3 +6,18 @@
 .idea/
 *.swp
 *~
+
+# Claude Code 协作层（settings.local.json 含本机路径，不入库）
+.claude/settings.local.json
+
+# memory 白名单：只提交 MEMORY.md 索引，其余 memory 文件本机私有
+.claude/memory/*
+!.claude/memory/MEMORY.md
+!.claude/memory/archive/
+
+# workspace 临时文件
+workspace/*
+!workspace/.gitkeep
+
+# docs archive
+docs/archive/
