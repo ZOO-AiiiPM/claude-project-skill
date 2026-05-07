@@ -49,7 +49,7 @@ git clone https://github.com/ZOO-AiiiPM/claude-project-skill.git \
 
 Claude 会走几轮对话问技术栈、部署方式、关键决策、会不会产出 eval / LLM / 爬虫数据等，然后：
 
-- 拷 `assets/` 骨架到目标路径，替换占位符
+- 根据对话内容直接生成 CLAUDE.md / journal.md / README.md（写入真实事实，不用占位符模板）
 - 根据对话内容写 `.claude/memory/project_stack.md`、`reference_deployment.md` 等事实文件（含 MEMORY.md 索引）
 - 代码项目选装 `coding-general` preset 或指向全局 `karpathy-guidelines` skill（有则指向、无则装）
 - `journal.md` 第一条写进对话里讲过的选型决策
@@ -183,8 +183,8 @@ claude-project-skill/
         ├── memory/MEMORY.md
         ├── rules/
         └── hooks/
-            ├── session-brief.sh
-            └── turn-reflect.sh
+            ├── session-brief.js
+            └── turn-reflect.js
 ```
 
 ---
