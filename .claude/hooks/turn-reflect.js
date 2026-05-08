@@ -30,9 +30,8 @@ if (hitJournal) {
   parts.push(
     `【第 ${count} 轮 — journal 提醒】\n` +
     `判断本段有没有值得记的进展 / 踩坑 / 学到：\n` +
-    `- 有实质决策 / 不可逆操作 / 踩坑 → 追加到 journal.md 顶部（倒序），格式 '## YYYY-MM-DD 标题' + 做了 / 坑了 / 学到，可选 + 决策\n` +
-    `- 只是澄清 / 讨论 / 列方案 → 跳过不写\n\n` +
-    `要写直接 Edit journal.md，不用问。跳过也不用通知。`
+    `- 有实质决策 / 不可逆操作 / 踩坑 → 提炼 2-3 句要点，用 Agent(run_in_background: true) 派后台 Agent 写 journal.md 顶部条目（传入：要点 + 今天日期 + journal.md 绝对路径；Agent 写完无需回复用户）；然后立即告知用户一句"📝 已派后台记录 journal"，不等 Agent 完成\n` +
+    `- 只是澄清 / 讨论 / 列方案 → 静默跳过，不通知`
   );
 }
 
@@ -45,7 +44,7 @@ if (hitDistill) {
     `- 单次踩坑但有反转（方案 A→B→C 才成）或反直觉结论 → 升 lesson\n` +
     `- 用户明确纠正规则 2+ 次 → 抽 rule（短的 1-3 行进 CLAUDE.md 项目硬规则段，长的进 .claude/rules/{主题}.md）\n` +
     `- 写了 memory 主题文件但 MEMORY.md 没更新索引 → 立刻补\n\n` +
-    `值得蒸馏就直接 Edit / Write 文件，完成后简报一行。不需要蒸馏就跳过不提。`
+    `有需要蒸馏的内容 → 提炼要点，用 Agent(run_in_background: true) 派后台 Agent 写文件（传入：蒸馏内容 + 目标文件路径）；立即告知用户一句"✨ 已派后台蒸馏"，不等 Agent 完成。无需蒸馏 → 静默跳过。`
   );
 }
 
